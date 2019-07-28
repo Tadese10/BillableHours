@@ -1,0 +1,199 @@
+﻿@model BillableHours.Web.Model.DashbboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<script>
+
+    $('#upload').submit(function (e) {
+        e.preventDefault(); // stop the standard form submission
+
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: new FormData(this),
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data.UploadedFileCount + ' file(s) uploaded successfully');
+            },
+            error: function (xhr, error, status) {
+                console.log(error, status);
+            }
+        });
+    });
+</script>
+
+<div id="right-panel" class="right-panel">
+    <!-- Header-->
+    <header id="header" class="header">
+        <div class="top-left">
+            <div class="navbar-header">
+            </div>
+        </div>
+        <div class="top-right">
+            <div class="header-menu">
+                <div class="header-left">
+                    <button class="search-trigger"><i class="fa fa-search"></i></button>
+                    <div class="form-inline">
+                        <form class="search-form">
+                            <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
+                            <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="user-area dropdown float-right">
+                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="user-avatar rounded-circle" src="images/admin.jpg" alt="User">
+                    </a>
+
+                    <div class="user-menu dropdown-menu">
+                        <a class="nav-link" href="#"><i class="fa fa-power -off"></i>Logout</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+    <!-- /#header -->
+    <!-- Content -->
+    <div class="content">
+        <!-- Animated -->
+        <div class="animated fadeIn">
+
+
+            <!--  /Traffic -->
+            <div class="clearfix"></div>
+            <!-- Orders -->
+            <div class="orders">
+                <form method="post" enctype="multipart/form-data" action="/Dashboard/Index">
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <button class="btn btn-success float-right" type="submit" style="margin-left:10px;margin-top:2px;">Upload</button>
+                                        <button type="button" class="btn btn-secondary float-right"> <input type="file" name="fileUpload" id="fileUpload" size="23" /> <br /></button>
+                                        <h4 class="box-title float-left">Invoices </h4>
+                                    </div>
+                                    <div class="card-body--">
+                                        <div class="table-stats order-table ov-h">
+                                            <table class="table col-xl-12">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="serial">#</th>
+                                                        <th>Employee ID</th>
+                                                        <th>Billable Rate (per hour)</th>
+                                                        <th>Project</th>
+                                                        <th>Date </th>
+                                                        <th>Start Time </th>
+                                                        <th>End Time </th>
+                                                        <th>Action </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.Invoices)
+                                                    {
+                                                        <tr>
+                                                            <td> @item.Id </td>
+                                                            <td> @item.EmployeeId </td>
+                                                            <td> @item.BillableRate </td>
+                                                            <td> @item.Project.Replace("\"","") </td>
+                                                            <td> @item.StartDate.ToShortDateString() </td>
+                                                            <td> @item.StartDate.TimeOfDay </td>
+                                                            <td> @item.EndDate.TimeOfDay </td>
+                                                            <td><a class="btn btn-success float-right" href="/Invoice/Index?id=@item.Id">View Invoice</a> </td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div> <!-- /.table-stats -->
+                                    </div>
+                                </div> <!-- /.card -->
+                            </div>  <!-- /.col-lg-8 -->
+
+                        </div>
+
+                    </form>
+
+
+</div>
+
+
+            <!-- /Calender Chart Weather -->
+            <!-- Modal - Calendar - Add New Event -->
+            <div class="modal fade none-border" id="event-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"><strong>Add New Event</strong></h4>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success save-event waves-effect waves-light">Create event</button>
+                            <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-dismiss="modal">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#event-modal -->
+            <!-- Modal - Calendar - Add Category -->
+            <div class="modal fade none-border" id="add-category">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"><strong>Add a category </strong></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label">Category Name</label>
+                                        <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label">Choose Category Color</label>
+                                        <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+                                            <option value="success">Success</option>
+                                            <option value="danger">Danger</option>
+                                            <option value="info">Info</option>
+                                            <option value="pink">Pink</option>
+                                            <option value="primary">Primary</option>
+                                            <option value="warning">Warning</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#add-category -->
+        </div>
+        <!-- .animated -->
+    </div>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+    <!-- Footer -->
+    <footer class="site-footer" style="">
+        <div class="footer-inner bg-white">
+            <div class="row">
+                <div class="col-sm-6">
+                    Copyright &copy; 2019
+                </div>
+               
+            </div>
+        </div>
+    </footer>
+    <!-- /.site-footer -->
+</div>

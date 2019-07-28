@@ -1,0 +1,71 @@
+﻿@model BillableHours.Web.Model.InvoiceViewModel
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="row p-5">
+                    <div class="col-md-6">
+                        <img src="http://via.placeholder.com/400x90?text=logo">
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <p class="font-weight-bold mb-1">Invoice @Model.Invoice.Id</p>
+                        <p class="text-muted">Due to: @DateTime.Now.AddDays(7).ToShortDateString()</p>
+                    </div>
+                </div>
+                <hr class="my-5">
+                <div class="row pb-5 p-5">
+                    <div class="col-md-6">
+                        <p class="font-weight-bold mb-4">Client Information</p>
+                        <p class="mb-1">@Model.Invoice.Project</p>
+                        <p>@Model.Invoice.Project Inc</p>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <p class="font-weight-bold mb-4">Payment Details</p>
+                        <p class="mb-1"><span class="text-muted">VAT: </span> 0</p>
+                        <p class="mb-1"><span class="text-muted">VAT ID: </span> @Guid.NewGuid().ToString().Substring(0,10)</p>
+                        <p class="mb-1"><span class="text-muted">Name: </span> @Model.User.Username</p>
+                    </div>
+                </div>
+                <div class="row p-5">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="border-0 text-uppercase small font-weight-bold">ID</th>
+                                    <th class="border-0 text-uppercase small font-weight-bold">Employee ID</th>
+                                    <th class="border-0 text-uppercase small font-weight-bold">Number of hours</th>
+                                    <th class="border-0 text-uppercase small font-weight-bold">Unit Price</th>
+                                    <th class="border-0 text-uppercase small font-weight-bold">Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@Model.Invoice.Id</td>
+                                    <td>@Model.Invoice.EmployeeId</td>
+                                    <td>@Model.Invoice.NumberOfHours</td>
+                                    <td>@Model.Invoice.BillableRate</td>
+                                    <td>@Model.Invoice.Cost</td>
+                                </tr>
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="d-flex flex-row-reverse bg-dark text-white p-4">
+                    <div class="py-3 px-5 text-right">
+                        <div class="mb-2">Grand Total</div>
+                        <div class="h2 font-weight-light">@Model.Invoice.Cost</div>
+                    </div>
+                    <div class="py-3 px-5 text-right">
+                        <div class="mb-2">Discount</div>
+                        <div class="h2 font-weight-light">0%</div>
+                    </div>
+                    <div class="py-3 px-5 text-right">
+                        <div class="mb-2">Sub - Total amount</div>
+                        <div class="h2 font-weight-light">@Model.Invoice.Cost</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
